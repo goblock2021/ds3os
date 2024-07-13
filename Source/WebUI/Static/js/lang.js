@@ -2,7 +2,7 @@
 // By GoBlock2021
 
 
-// 定义默认语言
+// Define default language
 const defaultLang = 'en-US';
 
 
@@ -13,24 +13,24 @@ function saveLanguage(lang) {
 
 
 function loadLanguage(lang) {
-	// 尝试加载指定语言的JSON文件
+	// Try to load the specified language JSON file
 	fetch(`./locales/${lang}.json`)
 		.then(response => {
-			// 检查响应状态
+			// Check response status
 			if (!response.ok) {
 				throw new Error('Invaid locales file!');
 			}
 			return response.json();
 		})
 		.then(data => {
-			// 更新页面文本
+			// Update page text
 			updatePageText(data);
 		})
 		.catch(error => {
-			// 打印错误信息到控制台
+			// Print error message to console
 			console.error('There was a problem fetching the language file:', error);
 
-			// 回退到默认语言
+			// Fallback to default language
 			if (lang!=defaultLang){
 				loadLanguage(defaultLang);
 			}
@@ -39,10 +39,10 @@ function loadLanguage(lang) {
 }
 
 function updatePageText(data) {
-	// 遍历所有具有data-i18n属性的元素
+	// Iterate over all elements with the data-i18n attribute
 	document.querySelectorAll('[data-i18n]').forEach(element => {
 		const key = element.getAttribute('data-i18n');
-		// 确保key存在于data中，否则使用元素的原始文本内容
+		// Ensure the key exists in data, otherwise use the element's original text content
 		element.innerHTML = data[key] || element.textContent;
 	});
 }
@@ -68,14 +68,14 @@ function generateJson() {
 	// Please execute it directly in the browser console if needed.
 
 	let elementsInfo = [];
-	// 遍历所有具有data-i18n属性的元素
+	// Iterate over all elements with the data-i18n attribute
 	document.querySelectorAll('[data-i18n]').forEach(element => {
 		const key = element.getAttribute('data-i18n');
-		// 将key和innerHTML添加到数组中
+		// Add key and innerHTML to array
 		elementsInfo.push(`"${key}": "${element.innerHTML}"`);
 	});
-	// 将数组连接成一个单一的字符串，每个元素之间用换行符分隔
+	// Join the array into a single string, with each element separated by a newline
 	let resultText = "{\n" + elementsInfo.join(',\n') + "\n}";
-	// 返回或打印整个文本
+	// Return or print the entire text
 	console.log(resultText);
 }
